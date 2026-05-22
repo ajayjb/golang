@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
-	"net/http"
-	"os"
+	"strings"
 )
 
 type bot interface {
@@ -21,6 +20,32 @@ type spanishBot struct {
 type Console struct {
 }
 
+type Shape interface {
+	getArea() float64
+}
+
+type Triangle struct {
+	b float64
+	h float64
+}
+
+type Sqaure struct {
+	l float64
+}
+
+func (t Triangle) getArea() float64 {
+	return (1.0 / 2.0 * t.b * t.h)
+}
+
+func (s Sqaure) getArea() float64 {
+	return (s.l * s.l)
+}
+
+func getArea(s Shape) float64 {
+	fmt.Println(s.getArea())
+	return s.getArea()
+}
+
 func (c Console) Write(p []byte) (int, error) {
 	fmt.Println(string(p))
 	return len(p), nil
@@ -32,16 +57,28 @@ func logWriter(p io.Writer) {
 
 func main() {
 
-	resp, err := http.Get("http://google.com")
+	// s := Sqaure{
+	// 	l: 4.3,
+	// }
 
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(0)
-	}
+	// t := Triangle{
+	// 	b: 4.5,
+	// 	h: 5.6,
+	// }
 
-	c := Console{}
+	// getArea(s)
+	// getArea(t)
 
-	io.Copy(c, resp.Body)
+	// resp, err := http.Get("http://google.com")
+
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(0)
+	// }
+
+	// c := Console{}
+
+	// io.Copy(c, resp.Body)
 
 	// buffer := make([]byte, 99999)
 
@@ -62,12 +99,12 @@ func main() {
 
 	// fmt.Println([]byte(x))
 
-	// reader := strings.NewReader("hello")
+	reader := strings.NewReader("hello")
 
 	// fmt.Println(reader)
 
 	// // create buffer of 4 bytes
-	// buffer := make([]byte, 5)
+	buffer := make([]byte, 4)
 
 	// fmt.Println(buffer)
 
@@ -101,11 +138,11 @@ func main() {
 	// fmt.Println()
 
 	// // THIRD READ (EOF)
-	// n, err = reader.Read(buffer)
+	n, err := reader.Read(buffer)
 
-	// fmt.Println("THIRD READ")
-	// fmt.Println("n:", n)
-	// fmt.Println("err:", err)
+	fmt.Println("THIRD READ")
+	fmt.Println("n:", n)
+	fmt.Println("err:", err)
 
 	// if err == io.EOF {
 	// 	fmt.Println("No more data left")

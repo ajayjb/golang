@@ -15,6 +15,15 @@ func main() {
 		"http://amazon.com",
 	}
 
+	d := make(chan string, 2)
+
+	d <- "Its time to leave planet"
+
+	fmt.Println((<-d))
+
+	// Above code only works with buffered channel if use with unbuffered channel we will get fatal error "fatal error: all goroutines are asleep - deadlock!"
+	// If we use buffered channel we must use the go routines
+
 	c := make(chan string)
 
 	for _, link := range links {
@@ -27,7 +36,6 @@ func main() {
 			checkLink(link, c)
 		}(l)
 	}
-
 }
 
 func checkLink(link string, c chan string) {
